@@ -31,7 +31,7 @@ class KafkaRouterConfigTest {
         validator.validate(kafkaRouterConfig)
 
         val expectedValidationErrors = setOf(
-            "backoff-strategy.backoff-time-seconds: -1 must not be negative",
+            "backoff-strategy.backoff-time-seconds: -1.0 must not be negative",
             "kafka[internal].bootstrapServers: ([]) must not be empty",
             "routes[0].target: (null) must not be empty",
             "routes[0].sourceTopic: ((123) must be a valid regular expression",

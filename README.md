@@ -32,9 +32,9 @@ Name of the consumer group for the Kafka Router (allowing multiple instances
 _Default_: `kafka-router`
 - `backoff-strategy.backoff-time-seconds` <br>
 When messages were read but could not be delivered (e.g. when the target Kafka is not reachable),
-the messages will not be committed in the source, but message delivery is retried instead. The backoff times (list of integers for seconds)
+the messages will not be committed in the source, but message delivery is retried instead. The backoff times (list of doubles for seconds)
 state after how many seconds a next attempt at delivering the messages should be made for the first, second, ..., attempt. <br>
-_Default_: `1, 1, 2, 3, 5, 10` (after the 5th retry, wait 10 seconds before trying again).
+_Default_: `0.5, 1, 2, 3, 5, 10` (after the 5th retry, wait 10 seconds before trying again).
 
 
 ```yaml

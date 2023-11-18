@@ -1,5 +1,6 @@
 package ch.frostnova.tools.kafkarouter.util
 
+import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import java.util.concurrent.Future
 import kotlin.reflect.KClass
@@ -19,4 +20,4 @@ fun <T> Future<T>.join(): Pair<T?, Exception?> {
     return result to exception
 }
 
-inline fun logger(kClass: KClass<*>) = LoggerFactory.getLogger(kClass.java)
+inline fun logger(kClass: KClass<*>): Logger = LoggerFactory.getLogger(kClass.java)

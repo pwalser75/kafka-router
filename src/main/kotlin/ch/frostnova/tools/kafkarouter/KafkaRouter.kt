@@ -8,8 +8,8 @@ import org.apache.kafka.clients.producer.Callback
 import org.apache.kafka.clients.producer.ProducerRecord
 import org.apache.kafka.common.header.internals.RecordHeader
 import java.time.Duration
+import java.util.concurrent.CompletableFuture
 import java.util.concurrent.ExecutorService
-import java.util.concurrent.Future
 import java.util.regex.Pattern
 
 
@@ -38,20 +38,20 @@ class KafkaRouter(
             }
         }
 
-    fun start(executorService: ExecutorService): Future<*> {
+    fun start(executorService: ExecutorService): CompletableFuture<*> {
 
         logger.info("Joining consumer group...")
-        source.groupMetadata()
+        source.subscribe(Pattern.compile(route.sourceTopic!!))
 
         logger.info("Subscribing to initial topics: ")
         val regex = Regex(route.sourceTopic!!)
         source.listTopics().map { it.key }.filter { regex.matches(it) }.forEach { logger.info("- $it") }
 
-        source.subscribe(Pattern.compile(route.sourceTopic!!))
+        val completableFuture = CompletableFuture<Unit>()
 
-        return executorService.submit {
+        executorService.submit {
             Thread.currentThread().name = name
-            while (true) {
+            while (!completableFuture.isCancelled) {
                 source.poll(Duration.ofSeconds(1))?.let { consumerRecords ->
                     if (!consumerRecords.isEmpty) {
                         val producerRecords = consumerRecords.map { consumerRecord ->
@@ -100,6 +100,8 @@ class KafkaRouter(
                     }
                 }
             }
+            completableFuture.complete(null)
         }
+        return completableFuture
     }
 }

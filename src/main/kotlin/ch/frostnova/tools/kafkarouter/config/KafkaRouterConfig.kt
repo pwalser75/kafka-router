@@ -1,6 +1,6 @@
 package ch.frostnova.tools.kafkarouter.config
 
-import ch.frostnova.tools.kafkarouter.config.converter.IntListDeserializer
+import ch.frostnova.tools.kafkarouter.config.converter.DoubleListDeserializer
 import ch.frostnova.tools.kafkarouter.config.converter.StringListDeserializer
 import ch.frostnova.tools.kafkarouter.config.validator.RegularExpression
 import ch.frostnova.tools.kafkarouter.util.validate
@@ -56,8 +56,8 @@ class KafkaRouterConfig {
 class BackoffStrategyConfig {
 
     @NotEmpty
-    @JsonDeserialize(using = IntListDeserializer::class)
-    var backoffTimeSeconds: @Valid List<@Min(0) Int> = listOf(1, 1, 2, 3, 5, 10)
+    @JsonDeserialize(using = DoubleListDeserializer::class)
+    var backoffTimeSeconds: @Valid List<@Min(0) Double> = listOf(0.5, 1.0, 2.0, 3.0, 5.0, 10.0)
 }
 
 class KafkaConfig {
