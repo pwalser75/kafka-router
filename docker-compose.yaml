@@ -3,7 +3,7 @@ services:
 
   kafka-router:
     container_name: kafka-router
-    image: ch.frostnova/kafka-router
+    image: pwalser75/kafka-router
     depends_on:
       - kafka
     volumes:

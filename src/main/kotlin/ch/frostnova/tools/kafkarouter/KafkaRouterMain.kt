@@ -48,9 +48,9 @@ class KafkaRouterMain {
             val kafkaClientFactory = KafkaClientFactory(kafkaRouterConfig.kafka, consumerGroup)
 
             logger.info("Configuring routes:")
-            val routers = kafkaRouterConfig.routes.map { route ->
+            val routers = kafkaRouterConfig.routes.mapIndexed { idx, route ->
                 logger.info("- {}", route)
-                KafkaRouter(kafkaClientFactory, backoffStrategy, route)
+                KafkaRouter("Route #${idx + 1}", kafkaClientFactory, backoffStrategy, route)
             }
             logger.info("Starting routes:")
 

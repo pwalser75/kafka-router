@@ -129,13 +129,13 @@ java -jar target/kafka-router.jar
 Build the docker image:
 
 ```shell
-mvn && docker build -t ch.frostnova/kafka-router .
+mvn && docker build -t pwalser75/kafka-router .
 ```
 
 Run the docker container:
 
 ```shell
-docker run -it --volume ./config:/config ch.frostnova/kafka-router
+docker run -it --volume ./config:/config pwalser75/kafka-router
 ```
 
 ### Docker-compose example
@@ -182,3 +182,8 @@ The **Redpanda Kafka Viewer** is accessible over http://localhost:9000. Here you
 (select topic, then _Actions>Publish Message_) and check if they're routed.
 
 ![Redpanda Kafka Viewer](kafka-viewer.png "Redpanda Kafka Viewer")
+
+The Kafka Router also adds an additional header `X-Kafka-Router-Source`,
+stating from which source / topic / partition / offset the messages was routed:
+
+![Kafka Header](kafka-header.png "Kafka Header")

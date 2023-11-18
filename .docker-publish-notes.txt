@@ -1,0 +1,2 @@
+docker login -u pwalser75
+docker push pwalser75/kafka-router

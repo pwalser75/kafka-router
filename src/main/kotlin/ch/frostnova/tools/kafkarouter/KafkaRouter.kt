@@ -6,7 +6,7 @@ import ch.frostnova.tools.kafkarouter.util.join
 import ch.frostnova.tools.kafkarouter.util.logger
 import org.apache.kafka.clients.producer.Callback
 import org.apache.kafka.clients.producer.ProducerRecord
-import java.io.IOException
+import org.apache.kafka.common.header.internals.RecordHeader
 import java.time.Duration
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Future
@@ -18,6 +18,7 @@ import java.util.regex.Pattern
  * and routes the messages from the selected source topics to the target topic.
  */
 class KafkaRouter(
+    private val name: String,
     kafkaClientFactory: KafkaClientFactory,
     private val backoffStrategy: BackoffStrategy,
     private val route: RouteConfig
@@ -49,6 +50,7 @@ class KafkaRouter(
         source.subscribe(Pattern.compile(route.sourceTopic!!))
 
         return executorService.submit {
+            Thread.currentThread().name = name
             while (true) {
                 source.poll(Duration.ofSeconds(1))?.let { consumerRecords ->
                     if (!consumerRecords.isEmpty) {
@@ -59,7 +61,17 @@ class KafkaRouter(
                                 consumerRecord.timestamp(),
                                 consumerRecord.key(),
                                 consumerRecord.value(),
-                                consumerRecord.headers()
+                                consumerRecord.headers().apply {
+                                    add(
+                                        RecordHeader(
+                                            "X-Kafka-Router-Source",
+                                            ("${route.source} " +
+                                                    "| topic: ${consumerRecord.topic()} " +
+                                                    "| partition: ${consumerRecord.partition()} " +
+                                                    "| offset: ${consumerRecord.offset()}").toByteArray()
+                                        )
+                                    )
+                                }
                             )
                             logger.info(
                                 "routing [{}] {} ({}:{}) to [{}] {}",
@@ -74,8 +86,6 @@ class KafkaRouter(
                         }
                         val futures = producerRecords.map {
                             backoffStrategy.runRetryable {
-                                val rnd = Math.random()
-                                if (rnd < 0.8) throw IOException("aaargh: $rnd")
                                 target.send(it, callback)
                             }
                         }
