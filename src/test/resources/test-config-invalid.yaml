@@ -1,0 +1,20 @@
+consumer-group: kafka-router
+backoff-strategy:
+  backoff-time-seconds: -1,7
+
+kafka:
+
+  internal:
+    truststore-password: SeCrEt-007!
+
+  external:
+    bootstrap-servers: external.kafka-host.org:443
+    truststore-path: demo-truststore.p12
+
+routes:
+
+  - source: nope
+    source-topic: (123
+
+  - target: yodel
+    target-topic: ((.*)

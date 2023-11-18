@@ -1,0 +1,50 @@
+HELP.md
+target/
+!.mvn/wrapper/maven-wrapper.jar
+!gradle-wrapper.jar
+
+### Gradle ###
+.gradle
+build/
+out/
+**/build/
+
+# Ignore Gradle GUI config
+gradle-app.setting
+
+# Cache of project
+.gradletasknamecache
+
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+
+# Quarkus
+.attach_pid*
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+/out/
+
+### VS Code ###
+.vscode/
+
+### Generated data ###
+/testdata/
+
+# Temp and backup files
+*.bak
+
+# reports
+reports
+
+# OSX
+**/.DS_Store

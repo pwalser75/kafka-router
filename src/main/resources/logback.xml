@@ -1,0 +1,16 @@
+<configuration>
+
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} %-5level [%thread] | %logger{40} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <logger name="ch.frostnova.tools.kafkarouter" level="info"/>
+    <logger name="org.apache.kafka" level="warn"/>
+
+    <root level="info">
+        <appender-ref ref="CONSOLE"/>
+    </root>
+
+</configuration>

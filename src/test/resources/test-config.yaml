@@ -1,0 +1,54 @@
+consumer-group: kafka-router
+backoff-strategy:
+  backoff-time-seconds: 1,2,3,4,5,10, 30, 60
+
+kafka:
+
+  local:
+    bootstrap-servers: localhost:9092
+
+  city-winterthur:
+    bootstrap-servers: location-winterthur-internal:9092
+
+  city-chur:
+    bootstrap-servers: location-chur-internal:9092
+
+  country-switzerland:
+    bootstrap-servers: switzerland.some-company.org:443
+    truststore-path: example-truststore.p12
+    truststore-password: SeCrEt-007!
+    keystore-path: example-keystore.p12
+    keystore-password: SeCrEt-007!
+
+  global:
+    bootstrap-servers: global.some-company.org:443
+    truststore-path: example-truststore.p12
+    truststore-password: SeCrEt-007!
+    keystore-path: example-keystore.p12
+    keystore-password: SeCrEt-007!
+
+routes:
+
+  # copy the sales topic from winterthur to switzerland
+  - source: city-winterthur
+    source-topic: sales
+    target: country-switzerland
+    target-topic: sales-winterthur
+
+  # copy the sales topic from chur to switzerland
+  - source: city-chur
+    source-topic: sales
+    target: country-switzerland
+    target-topic: sales-chur
+
+  # collect the sales from all locations to a sales-all topic
+  - source: country-switzerland
+    source-topic: sales-.+
+    target: country-switzerland
+    target-topic: sales-all
+
+  # collect all sales globally
+  - source: country-switzerland
+    source-topic: sales-all
+    target: global
+    target-topic: all-sales
