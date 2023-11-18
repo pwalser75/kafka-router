@@ -186,7 +186,7 @@
         <repository>
             <id>github</id>
             <name>GitHub Packages</name>
-            <url>https://maven.pkg.github.com/frostnova.ch/kafka-router</url>
+            <url>https://maven.pkg.github.com/pwalser75/kafka-router</url>
         </repository>
     </distributionManagement>
 
