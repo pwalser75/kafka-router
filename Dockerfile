@@ -3,7 +3,7 @@ FROM eclipse-temurin:17 as jre-build
 # Create a custom Java runtime
 # see https://dzone.com/articles/ways-to-reduce-jvm-docker-image-size
 RUN $JAVA_HOME/bin/jlink \
-         --add-modules ALL-MODULE-PATH \
+         --add-modules java.base,java.xml,java.naming,java.management \
          --strip-debug \
          --no-man-pages \
          --no-header-files \
