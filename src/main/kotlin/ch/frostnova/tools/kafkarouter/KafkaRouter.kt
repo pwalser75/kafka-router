@@ -25,7 +25,7 @@ class KafkaRouter(
 ) {
     private val logger = logger(KafkaRouter::class)
 
-    private val source = kafkaClientFactory.createConsumer(route.source!!)
+    private val source = kafkaClientFactory.createConsumer(route.source!!, name)
     private val target = kafkaClientFactory.createProducer(route.target!!)
 
     private val callback =

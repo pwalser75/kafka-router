@@ -1,7 +1,6 @@
 package ch.frostnova.tools.kafkarouter
 
 import ch.frostnova.tools.kafkarouter.util.BackoffStrategy
-import ch.frostnova.tools.kafkarouter.util.join
 import ch.frostnova.tools.kafkarouter.util.logger
 import java.util.concurrent.Executors.newFixedThreadPool
 
@@ -37,20 +36,17 @@ class KafkaRouterMain {
 
     private fun start() {
         val kafkaRouterConfig = ResourceLoader.loadConfig()
-        val consumerGroup = kafkaRouterConfig.consumerGroup ?: "kafka-router".also {
-            logger.info("using default consumer group '$it'")
-        }
         val backoffStrategy = BackoffStrategy(Int.MAX_VALUE, kafkaRouterConfig.backoffStrategy.backoffTimeSeconds)
 
         if (kafkaRouterConfig.routes.isEmpty()) {
             logger.warn("No routes configured, idle.")
         } else {
-            val kafkaClientFactory = KafkaClientFactory(kafkaRouterConfig.kafka, consumerGroup)
+            val kafkaClientFactory = KafkaClientFactory(kafkaRouterConfig.kafka)
 
             logger.info("Configuring routes:")
-            val routers = kafkaRouterConfig.routes.mapIndexed { idx, route ->
-                logger.info("- {}", route)
-                KafkaRouter("Route #${idx + 1}", kafkaClientFactory, backoffStrategy, route)
+            val routers = kafkaRouterConfig.routes.map { (name, route) ->
+                logger.info("- {}: {}", name, route)
+                KafkaRouter(name, kafkaClientFactory, backoffStrategy, route)
             }
             logger.info("Starting routes:")
 

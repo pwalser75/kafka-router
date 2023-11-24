@@ -1,20 +1,20 @@
-consumer-group: kafka-router
-
 kafka:
 
-  kafka:
+  kafka-container:
     bootstrap-servers: kafka:29092
 
 routes:
 
   # copy the sales topic from winterthur to switzerland
-  - source: kafka
+  sales-winterthur-switzerland:
+    source: kafka-container
     source-topic: sales-winterthur
-    target: kafka
+    target: kafka-container
     target-topic: sales-switzerland
 
-    # copy the sales topic from chur to switzerland
-  - source: kafka
+  # copy the sales topic from chur to switzerland
+  sales-chur-switzerland:
+    source: kafka-container
     source-topic: sales-chur
-    target: kafka
+    target: kafka-container
     target-topic: sales-switzerland

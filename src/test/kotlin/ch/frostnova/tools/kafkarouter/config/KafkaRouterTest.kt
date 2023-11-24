@@ -61,7 +61,7 @@ class KafkaRouterTest {
 
     @BeforeEach
     fun setup() {
-        every { kafkaClientFactory.createConsumer(any()) } returns consumer
+        every { kafkaClientFactory.createConsumer(any(), any()) } returns consumer
         every { kafkaClientFactory.createProducer(any()) } returns producer
 
         every { consumer.subscribe(any<Pattern>()) } just runs

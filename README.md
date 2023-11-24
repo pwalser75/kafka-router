@@ -47,7 +47,9 @@ backoff-strategy:
 
 Configure the Kafka instances you want to work with (as a consumer or provider, or both).
 
-Config prefix: `kafka`: map of Kafka instance key (used for routing config) with Kafka properties.
+Config prefix: `kafka`: map of Kafka instance name (used for routing config) with Kafka properties.
+
+The names of the Kafka instances are _lower-kebab-case_, with letters and digits allowed.
 
 Properties:
 
@@ -74,41 +76,50 @@ kafka:
 
 ### Message routing
 
-Configure the message routing (from which sources you want to consume data, and where it should be published):
+Configure the message routing (from which sources you want to consume data, and where it should be published).
 
-Config prefix: `routes`: list of routes, with the following properties:
+The names of the Kafka instances are _lower-kebab-case_, with letters and digits allowed.
 
-- `source`: Kafka instance key (see above) from where data should be consumed.
+Config prefix: `routes`: map of named routes, with the following properties:
+
+- `source`: Kafka instance name (see above) from where data should be consumed.
 - `source-topic`: Source topic name, regular expression (allowing to specify several source topics)
 - `target`: Kafka instance key (see above) to which data should be routed.
 - `target-topic`: Optional target topic. If absent, the same topic as the source of the message is used.
+
+The **route name** will become the name of the **Kafka consumer group**
+(as every route needs to consume messages independent of other routes).
 
 ```yaml
 routes:
 
   # copy the sales topic from winterthur to switzerland
-  - source: city-winterthur
+  sales-winterthur-to-sales-switzerland:
+    source: city-winterthur
     source-topic: sales
     target: country-switzerland
     target-topic: sales-winterthur
-    
+
   # copy the sales topic from chur to switzerland
-  - source: city-chur
+  sales-chur-to-sales-switzerland:
+    source: city-chur
     source-topic: sales
     target: country-switzerland
     target-topic: sales-chur
-    
+
   # collect the sales from all locations to a sales-all topic
-  - source: country-switzerland
-    source-topic: sales-.+
-    target: country-switzerland
-    target-topic: sales-all
-    
+  sales-all-switzerland:
+    - source: country-switzerland
+      source-topic: sales-.+
+      target: country-switzerland
+      target-topic: sales-all
+
   # collect all sales globally
-  - source: country-switzerland
-    source-topic: sales-all
-    target: global
-    target-topic: all-sales
+  sales-global:
+    - source: country-switzerland
+      source-topic: sales-all
+      target: global
+      target-topic: all-sales
 ```
 
 ## Maven Build / run
@@ -135,7 +146,7 @@ mvn && docker build -t pwalser75/kafka-router .
 Run the docker container:
 
 ```shell
-docker run -it --volume ./config:/config pwalser75/kafka-router
+docker run -it --volume ./docker-example-config.yaml:/config/config.yaml pwalser75/kafka-router
 ```
 
 ### Docker-compose example
@@ -181,9 +192,13 @@ docker logs -f kafka-router
 The **Redpanda Kafka Viewer** is accessible over http://localhost:9000. Here you see the topics, and can also upload test messages 
 (select topic, then _Actions>Publish Message_) and check if they're routed.
 
-![Redpanda Kafka Viewer](kafka-viewer.png "Redpanda Kafka Viewer")
+![Redpanda Kafka Viewer](images/kafka-viewer.png "Redpanda Kafka Viewer")
+
+The consumer groups (one for each route) are visible as well:
+
+![Consumer Groups](images/consumer-groups.png "Consumer Groups")
 
 The Kafka Router also adds an additional header `X-Kafka-Router-Source`,
 stating from which source / topic / partition / offset the messages was routed:
 
-![Kafka Header](kafka-header.png "Kafka Header")
+![Kafka Header](images/kafka-header.png "Kafka Header")

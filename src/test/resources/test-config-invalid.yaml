@@ -1,4 +1,3 @@
-consumer-group: kafka-router
 backoff-strategy:
   backoff-time-seconds: -1,7
 
@@ -11,10 +10,18 @@ kafka:
     bootstrap-servers: external.kafka-host.org:443
     truststore-path: demo-truststore.p12
 
+  this-is-valid:
+    bootstrap-servers: external.kafka-host.org:443
+
+  This-ain'nt_valid:
+    bootstrap-servers: external.kafka-host.org:443
+
 routes:
 
-  - source: nope
+  example-123:
+    source: nope
     source-topic: (123
 
-  - target: yodel
+  Example 123:
+    target: yodel
     target-topic: ((.*)

@@ -17,13 +17,12 @@ import java.util.Properties
  * The KafkaClientFactory creates Kafka clients for sources (consumers) and targets (producers).
  */
 class KafkaClientFactory(
-    private val kafkaConfigs: Map<String, KafkaConfig>,
-    private val consumerGroup: String
+    private val kafkaConfigs: Map<String, KafkaConfig>
 ) {
 
     private val logger = logger(KafkaClientFactory::class)
 
-    fun createConsumer(id: String): KafkaConsumer<Bytes, Bytes> {
+    fun createConsumer(id: String, consumerGroup: String): KafkaConsumer<Bytes, Bytes> {
         val kafkaConfig = getConfig(id)
 
         // overridable properties
