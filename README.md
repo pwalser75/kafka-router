@@ -132,7 +132,7 @@ mvn
 This builds an Uber JAR (portable Java application with libraries included), which you can run with:
 
 ```shell
-java -jar target/kafka-router.jar
+java -jar target/kafka-router.jar config.yaml
 ```
 
 ### Docker build / run

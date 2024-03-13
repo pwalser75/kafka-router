@@ -16,18 +16,18 @@
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
 
-        <kotlin.version>1.9.20</kotlin.version>
+        <kotlin.version>1.9.23</kotlin.version>
 
-        <kafka-client.version>3.6.1</kafka-client.version>
-        <logback.version>1.5.0</logback.version>
-        <jackson.version>2.16.1</jackson.version>
+        <kafka-client.version>3.7.0</kafka-client.version>
+        <logback.version>1.5.3</logback.version>
+        <jackson.version>2.17.0</jackson.version>
         <jakarta-validation.version>3.0.2</jakarta-validation.version>
         <hibernate-validator.version>8.0.1.Final</hibernate-validator.version>
-        <slf4j.version>2.0.7</slf4j.version>
+        <slf4j.version>2.0.12</slf4j.version>
 
         <junit.version>5.10.2</junit.version>
         <assertj.version>3.25.3</assertj.version>
-        <mockk.version>1.13.9</mockk.version>
+        <mockk.version>1.13.10</mockk.version>
 
     </properties>
 
