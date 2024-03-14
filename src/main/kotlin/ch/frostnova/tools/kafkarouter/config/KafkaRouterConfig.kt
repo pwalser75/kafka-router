@@ -24,7 +24,7 @@ class KafkaRouterConfig {
     var routes: Map<@Pattern(regexp = "^[a-z0-9]+(?:-[a-z0-9]+)*\$") String, RouteConfig> = emptyMap()
 
     fun validate() {
-        var errors = mutableListOf<String>()
+        val errors = mutableListOf<String>()
 
         // bean validation first
         try {

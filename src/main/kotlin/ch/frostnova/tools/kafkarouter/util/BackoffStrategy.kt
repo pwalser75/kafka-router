@@ -3,11 +3,11 @@ package ch.frostnova.tools.kafkarouter.util
 import java.lang.Thread.sleep
 
 class BackoffStrategy(
-    val retryCount: Int = Int.MAX_VALUE,
-    val backoffTimeSeconds: List<Double> = listOf(1.0, 2.0, 3.0, 5.0, 10.0, 30.0)
+    private val retryCount: Int = Int.MAX_VALUE,
+    private val backoffTimeSeconds: List<Double> = listOf(1.0, 2.0, 3.0, 5.0, 10.0, 30.0)
 ) {
 
-    val logger = logger(BackoffStrategy::class)
+    private val logger = logger(BackoffStrategy::class)
 
     fun <T : Any> runRetryable(producer: () -> T): T {
 

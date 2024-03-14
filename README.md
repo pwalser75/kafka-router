@@ -1,20 +1,24 @@
 # Kafka Router
 
-The Kafka Router allows you to consume data from multiple Kafka instances / topics and route them to other Kafka instances / topics.
+The Kafka Router allows you to consume data from multiple Kafka instances / topics and route them to other Kafka
+instances / topics.
 
 ## Use Cases
 
 - **clone** Kafka data <br>e.g. consume data from a demo environment and replicate it to your local Kafka.
-- **proxy** external Kafka instances <br>e.g. have one whitelisted host consume from external Kafka sources and replicate data to internal Kafka instances, can also go the other way by routing data from internal Kafka sources to external Kafka instances.
+- **proxy** external Kafka instances <br>e.g. have one whitelisted host consume from external Kafka sources and
+  replicate data to internal Kafka instances, can also go the other way by routing data from internal Kafka sources to
+  external Kafka instances.
 - **merge** messages <br>from multiple topics into one aggregate topic.
-
 
 ## Environment variables
 
 Two environment variables are used:
 
-- `CONFIG_FILE`: the path to the config file. Default: `/config/config.yaml`. The config file can be YAML (`*.yaml`, `*.yml`) or JSON (`*.json`).
-- `RESSOURCE_PATH`: the path to the directory for additional resources (truststores, keystores, etc.). Default: `/config`.
+- `CONFIG_FILE`: the path to the config file. Default: `/config/config.yaml`. The config file can be
+  YAML (`*.yaml`, `*.yml`) or JSON (`*.json`).
+- `RESSOURCE_PATH`: the path to the directory for additional resources (truststores, keystores, etc.).
+  Default: `/config`.
 
 ## Configuration
 
@@ -27,15 +31,16 @@ General configuration:
 Properties:
 
 - `consumer-group` <br>
-Name of the consumer group for the Kafka Router (allowing multiple instances
+  Name of the consumer group for the Kafka Router (allowing multiple instances
   running concurrently and resuming data processing from committed offsets). <br>
-_Default_: `kafka-router`
+  _Default_: `kafka-router`
 - `backoff-strategy.backoff-time-seconds` <br>
-When messages were read but could not be delivered (e.g. when the target Kafka is not reachable),
-the messages will not be committed in the source, but message delivery is retried instead. The backoff times (list of doubles for seconds)
-state after how many seconds a next attempt at delivering the messages should be made for the first, second, ..., attempt. <br>
-_Default_: `0.5, 1, 2, 3, 5, 10` (after the 5th retry, wait 10 seconds before trying again).
-
+  When messages were read but could not be delivered (e.g. when the target Kafka is not reachable),
+  the messages will not be committed in the source, but message delivery is retried instead. The backoff times (list of
+  doubles for seconds)
+  state after how many seconds a next attempt at delivering the messages should be made for the first, second, ...,
+  attempt. <br>
+  _Default_: `0.5, 1, 2, 3, 5, 10` (after the 5th retry, wait 10 seconds before trying again).
 
 ```yaml
 consumer-group: kafka-router
@@ -129,6 +134,7 @@ Build with Maven (default goals: `clean install`):
 ```shell
 mvn
 ```
+
 This builds an Uber JAR (portable Java application with libraries included), which you can run with:
 
 ```shell
@@ -164,6 +170,7 @@ docker-compose up -d
 ```
 
 You can then view the logs with:
+
 ```shell
 docker logs -f kafka-router
 ```
@@ -189,7 +196,8 @@ docker logs -f kafka-router
 13:15:52.764 INFO  [main] | c.f.tools.kafkarouter.KafkaRouterMain - Startup complete, ready to route messages...
 ```
 
-The **Redpanda Kafka Viewer** is accessible over http://localhost:9000. Here you see the topics, and can also upload test messages 
+The **Redpanda Kafka Viewer** is accessible over http://localhost:9000. Here you see the topics, and can also upload
+test messages
 (select topic, then _Actions>Publish Message_) and check if they're routed.
 
 ![Redpanda Kafka Viewer](images/kafka-viewer.png "Redpanda Kafka Viewer")

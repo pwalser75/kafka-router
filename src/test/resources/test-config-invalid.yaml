@@ -13,7 +13,7 @@ kafka:
   this-is-valid:
     bootstrap-servers: external.kafka-host.org:443
 
-  This-ain'nt_valid:
+  This-ain't_valid:
     bootstrap-servers: external.kafka-host.org:443
 
 routes:
